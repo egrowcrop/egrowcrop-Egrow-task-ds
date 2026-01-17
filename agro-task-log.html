@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agro Task Log - Daily Farm Operations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d5016;
+            --primary-light: #4a7c2c;
+            --accent: #f4a226;
+            --bg: #fafbf6;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --text-light: #666666;
+            --border: #e0e5d8;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --shadow: rgba(45, 80, 22, 0.08);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #fafbf6 0%, #f0f4e8 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            position: relative;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .form-card h2 {
+            color: var(--primary);
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: var(--bg);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(74, 124, 44, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232d5016' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        .file-upload {
+            position: relative;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: var(--bg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-light);
+            background: white;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-text {
+            color: var(--text-light);
+            font-size: 0.95em;
+        }
+
+        .file-upload-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: var(--primary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .stats-panel {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .stats-panel h3 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: white;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .stat-label {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--primary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .records-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .records-section h2 {
+            color: var(--primary);
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .records-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .record-card {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-light);
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .record-card:hover {
+            box-shadow: 0 4px 15px var(--shadow);
+            transform: translateX(5px);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .record-date {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+
+        .record-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-progress {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .status-pending {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .record-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .record-detail {
+            font-size: 0.95em;
+        }
+
+        .record-detail strong {
+            color: var(--text-light);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .record-notes {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .record-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .record-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .record-images img:hover {
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 25px var(--shadow);
+            animation: slideUp 0.5s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 Agricultural Task Log</h1>
+            <p>Daily farm operations tracking system</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-card">
+                <h2>📝 New Task Entry</h2>
+                <form id="taskForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="day">Day</label>
+                            <input type="text" id="day" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskType">Task Type</label>
+                        <select id="taskType" required>
+                            <option value="">Select task type...</option>
+                            <option value="FERTILIZER">🌿 FERTILIZER</option>
+                            <option value="PLANTING">🌱 PLANTING</option>
+                            <option value="INDUCE">💧 INDUCE</option>
+                            <option value="HARVEST">🌾 HARVEST</option>
+                            <option value="WEED">🌿 WEED</option>
+                            <option value="SUCKER">✂️ SUCKER</option>
+                            <option value="LAND PREPARATION">🚜 LAND PREPARATION</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="timeStart">Time Start</label>
+                            <input type="time" id="timeStart" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeEnd">Time End</label>
+                            <input type="time" id="timeEnd" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="operator">Operator Name</label>
+                        <input type="text" id="operator" placeholder="Enter operator name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workNotes">Work Notes</label>
+                        <textarea id="workNotes" placeholder="Describe the work performed, area covered, materials used..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weather">Weather Condition</label>
+                        <input type="text" id="weather" placeholder="e.g., Sunny, 28°C, light breeze" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Photos</label>
+                        <div class="file-upload">
+                            <div class="file-upload-icon">📷</div>
+                            <div class="file-upload-text">
+                                <strong>Click to upload</strong> or drag and drop<br>
+                                <small>PNG, JPG up to 10MB</small>
+                            </div>
+                            <input type="file" id="photos" accept="image/*" multiple>
+                        </div>
+                        <div class="image-preview" id="imagePreview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" required>
+                            <option value="Pending">⏳ Pending</option>
+                            <option value="In Progress">🔄 In Progress</option>
+                            <option value="Completed">✅ Completed</option>
+                            <option value="On Hold">⏸️ On Hold</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Save Task
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="exportToExcel()">
+                            📊 Export to Excel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="stats-panel">
+                <h3>📊 Task Statistics</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Total Tasks</span>
+                    <span class="stat-value" id="totalTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Completed</span>
+                    <span class="stat-value" id="completedTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">In Progress</span>
+                    <span class="stat-value" id="progressTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Pending</span>
+                    <span class="stat-value" id="pendingTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Today's Tasks</span>
+                    <span class="stat-value" id="todayTasks">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="records-section">
+            <h2>📋 Task Records</h2>
+            <div class="records-filter">
+                <button class="filter-btn active" onclick="filterRecords('all')">All</button>
+                <button class="filter-btn" onclick="filterRecords('FERTILIZER')">Fertilizer</button>
+                <button class="filter-btn" onclick="filterRecords('PLANTING')">Planting</button>
+                <button class="filter-btn" onclick="filterRecords('HARVEST')">Harvest</button>
+                <button class="filter-btn" onclick="filterRecords('WEED')">Weed</button>
+                <button class="filter-btn" onclick="filterRecords('SUCKER')">Sucker</button>
+                <button class="filter-btn" onclick="filterRecords('LAND PREPARATION')">Land Prep</button>
+            </div>
+            <div id="recordsList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>No tasks recorded yet</h3>
+                    <p>Start by adding your first task above</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('agroTasks')) || [];
+        let currentFilter = 'all';
+        let uploadedImages = [];
+
+        // Set today's date
+        document.getElementById('date').valueAsDate = new Date();
+        updateDayField();
+
+        // Update day when date changes
+        document.getElementById('date').addEventListener('change', updateDayField);
+
+        function updateDayField() {
+            const dateInput = document.getElementById('date');
+            const dayInput = document.getElementById('day');
+            if (dateInput.value) {
+                const date = new Date(dateInput.value);
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                dayInput.value = days[date.getDay()];
+            }
+        }
+
+        // Handle file upload
+        document.getElementById('photos').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            uploadedImages = [];
+
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                    uploadedImages.push(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const task = {
+                id: Date.now(),
+                date: document.getElementById('date').value,
+                day: document.getElementById('day').value,
+                taskType: document.getElementById('taskType').value,
+                timeStart: document.getElementById('timeStart').value,
+                timeEnd: document.getElementById('timeEnd').value,
+                operator: document.getElementById('operator').value,
+                workNotes: document.getElementById('workNotes').value,
+                weather: document.getElementById('weather').value,
+                status: document.getElementById('status').value,
+                images: uploadedImages,
+                duration: calculateDuration(document.getElementById('timeStart').value, document.getElementById('timeEnd').value)
+            };
+
+            tasks.push(task);
+            localStorage.setItem('agroTasks', JSON.stringify(tasks));
+
+            showToast('✅ Task saved successfully!');
+            this.reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            uploadedImages = [];
+            document.getElementById('date').valueAsDate = new Date();
+            updateDayField();
+            
+            renderRecords();
+            updateStats();
+        });
+
+        function calculateDuration(start, end) {
+            const startTime = new Date('2000-01-01 ' + start);
+            const endTime = new Date('2000-01-01 ' + end);
+            const diff = (endTime - startTime) / (1000 * 60 * 60);
+            return diff.toFixed(2) + ' hrs';
+        }
+
+        function renderRecords() {
+            const recordsList = document.getElementById('recordsList');
+            let filteredTasks = currentFilter === 'all' ? tasks : tasks.filter(t => t.taskType === currentFilter);
+            
+            if (filteredTasks.length === 0) {
+                recordsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No tasks found</h3>
+                        <p>No tasks match your current filter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            recordsList.innerHTML = filteredTasks.map(task => `
+                <div class="record-card">
+                    <div class="record-header">
+                        <div>
+                            <div class="record-date">${formatDate(task.date)} - ${task.day}</div>
+                            <div style="margin-top: 5px; font-size: 1.1em; font-weight: 600;">${task.taskType}</div>
+                        </div>
+                        <div class="record-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</div>
+                    </div>
+                    <div class="record-details">
+                        <div class="record-detail">
+                            <strong>⏰ Time</strong>
+                            ${task.timeStart} - ${task.timeEnd}
+                        </div>
+                        <div class="record-detail">
+                            <strong>⏱️ Duration</strong>
+                            ${task.duration}
+                        </div>
+                        <div class="record-detail">
+                            <strong>👤 Operator</strong>
+                            ${task.operator}
+                        </div>
+                        <div class="record-detail">
+                            <strong>🌤️ Weather</strong>
+                            ${task.weather}
+                        </div>
+                    </div>
+                    <div class="record-notes">
+                        <strong>📋 Work Notes:</strong><br>
+                        ${task.workNotes}
+                    </div>
+                    ${task.images && task.images.length > 0 ? `
+                        <div class="record-images">
+                            ${task.images.map(img => `<img src="${img}" alt="Task photo" onclick="viewImage('${img}')">`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function viewImage(src) {
+            window.open(src, '_blank');
+        }
+
+        function filterRecords(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderRecords();
+        }
+
+        function updateStats() {
+            document.getElementById('totalTasks').textContent = tasks.length;
+            document.getElementById('completedTasks').textContent = tasks.filter(t => t.status === 'Completed').length;
+            document.getElementById('progressTasks').textContent = tasks.filter(t => t.status === 'In Progress').length;
+            document.getElementById('pendingTasks').textContent = tasks.filter(t => t.status === 'Pending').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('todayTasks').textContent = tasks.filter(t => t.date === today).length;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function exportToExcel() {
+            if (tasks.length === 0) {
+                showToast('⚠️ No data to export');
+                return;
+            }
+
+            const exportData = tasks.map(task => ({
+                'Date': task.date,
+                'Day': task.day,
+                'Task Type': task.taskType,
+                'Time Start': task.timeStart,
+                'Time End': task.timeEnd,
+                'Duration': task.duration,
+                'Operator': task.operator,
+                'Work Notes': task.workNotes,
+                'Weather': task.weather,
+                'Status': task.status,
+                'Photos': task.images ? task.images.length + ' photo(s)' : 'No photos'
+            }));
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            
+            // Set column widths
+            ws['!cols'] = [
+                {wch: 12}, {wch: 10}, {wch: 18}, {wch: 10}, {wch: 10}, 
+                {wch: 12}, {wch: 15}, {wch: 40}, {wch: 18}, {wch: 12}, {wch: 12}
+            ];
+
+            XLSX.utils.book_append_sheet(wb, ws, "Task Log");
+            XLSX.writeFile(wb, `Agro_Task_Log_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showToast('📥 Excel file downloaded!');
+        }
+
+        // Initialize
+        renderRecords();
+        updateStats();
+    </script>
+</body>
+</html>
