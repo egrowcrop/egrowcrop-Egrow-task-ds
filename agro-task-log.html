@@ -2,513 +2,279 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agro Task Log - Daily Farm Operations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agro Task Log - Farm & Inventory Management</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Agricultural Task & Inventory Management System - Track farm operations, manage inventory, log tasks with photos">
+    <meta name="theme-color" content="#2d5016">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AgroLog">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- App Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232d5016'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='70' fill='%23fff'%3E🌱%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%232d5016' rx='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='100' fill='%23fff'%3E🌱%3C/text%3E%3C/svg%3E">
+    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #2d5016;
-            --primary-light: #4a7c2c;
-            --accent: #f4a226;
-            --bg: #fafbf6;
-            --card-bg: #ffffff;
-            --text: #1a1a1a;
-            --text-light: #666666;
-            --border: #e0e5d8;
-            --success: #4caf50;
-            --warning: #ff9800;
-            --shadow: rgba(45, 80, 22, 0.08);
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #fafbf6 0%, #f0f4e8 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-            background-attachment: fixed;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            padding: 40px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-        }
-
-        .header h1 {
-            color: white;
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .header p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1em;
-            position: relative;
-        }
-
-        .main-content {
+        /* ALL YOUR EXISTING CSS STAYS HERE - 3,000+ LINES */
+        /* ... [Your complete CSS from earlier] ... */
+        
+        /* INVENTORY SPECIFIC STYLES - ADD THESE AT THE END */
+        .inventory-item-row {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .form-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px var(--shadow);
-        }
-
-        .form-card h2 {
-            color: var(--primary);
-            font-size: 1.8em;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
+            grid-template-columns: 2fr 1fr 1fr 2fr 1fr auto;
             gap: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        label {
-            display: block;
-            color: var(--text);
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background: var(--bg);
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(74, 124, 44, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232d5016' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 40px;
-        }
-
-        .file-upload {
-            position: relative;
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            background: var(--bg);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .file-upload:hover {
-            border-color: var(--primary-light);
-            background: white;
-        }
-
-        .file-upload input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .file-upload-text {
-            color: var(--text-light);
-            font-size: 0.95em;
-        }
-
-        .file-upload-icon {
-            font-size: 2.5em;
             margin-bottom: 10px;
-            opacity: 0.5;
-        }
-
-        .image-preview {
-            margin-top: 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-        }
-
-        .image-preview img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
+            padding: 10px;
+            background: var(--bg);
             border-radius: 8px;
-            border: 2px solid var(--border);
+            align-items: center;
         }
-
-        .btn {
-            padding: 14px 30px;
-            border: none;
+        
+        .stock-level {
+            padding: 4px 8px;
             border-radius: 12px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.05em;
+            font-size: 0.8em;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--bg);
-            color: var(--text);
-            border: 2px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            border-color: var(--primary);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .stats-panel {
+        
+        .stock-level.high { background: #e8f5e9; color: #2e7d32; }
+        .stock-level.medium { background: #fff3e0; color: #ef6c00; }
+        .stock-level.low { background: #ffebee; color: #c62828; }
+        
+        .inventory-card {
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px var(--shadow);
-        }
-
-        .stats-panel h3 {
-            color: var(--primary);
-            font-size: 1.4em;
-            margin-bottom: 20px;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: var(--bg);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            background: white;
-            box-shadow: 0 2px 10px var(--shadow);
-        }
-
-        .stat-label {
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.2em;
-            color: var(--primary);
-            font-family: 'Space Mono', monospace;
-        }
-
-        .records-section {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px var(--shadow);
-        }
-
-        .records-section h2 {
-            color: var(--primary);
-            font-size: 1.8em;
-            margin-bottom: 25px;
-        }
-
-        .records-filter {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 20px;
-            border: 2px solid var(--border);
-            background: var(--bg);
-            border-radius: 20px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .record-card {
-            background: var(--bg);
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             margin-bottom: 15px;
-            border-left: 4px solid var(--primary-light);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .inventory-card.low-stock {
+            border-left-color: #ff9800;
+            background: linear-gradient(to right, #fff3e0 0%, white 50%);
+        }
+        
+        .inventory-card.out-of-stock {
+            border-left-color: #f44336;
+            background: linear-gradient(to right, #ffebee 0%, white 50%);
+        }
+        
+        .inventory-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .inventory-tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .inventory-tab-content.active {
+            display: block;
+        }
+        
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px var(--shadow);
+            border: 2px solid var(--border);
             transition: all 0.3s ease;
-            animation: slideIn 0.5s ease;
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .record-card:hover {
+        
+        .item-card:hover {
+            transform: translateY(-3px);
             box-shadow: 0 4px 15px var(--shadow);
-            transform: translateX(5px);
         }
-
-        .record-header {
+        
+        .item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-
-        .record-date {
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 1.1em;
-        }
-
-        .record-status {
-            padding: 5px 15px;
+        
+        .item-code {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-weight: 600;
         }
-
-        .status-completed {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status-progress {
-            background: #fff3e0;
-            color: #ef6c00;
-        }
-
-        .status-pending {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .record-details {
+        
+        .item-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-
-        .record-detail {
-            font-size: 0.95em;
+        
+        .item-stat {
+            text-align: center;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 8px;
         }
-
-        .record-detail strong {
+        
+        .item-stat-label {
+            font-size: 0.85em;
             color: var(--text-light);
-            font-weight: 500;
-            display: block;
             margin-bottom: 5px;
-            font-size: 0.9em;
         }
-
-        .record-notes {
-            margin-top: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            font-size: 0.95em;
-            line-height: 1.6;
+        
+        .item-stat-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
         }
-
-        .record-images {
+        
+        .barcode-scanner {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border: 3px dashed var(--border);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            background: var(--bg);
+        }
+        
+        .scanner-placeholder {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .quick-actions {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
-
-        .record-images img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
+        
+        .quick-action-btn {
+            padding: 8px 15px;
+            border: none;
             border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-
-        .record-images img:hover {
-            transform: scale(1.1);
+        
+        .btn-restock { background: #4caf50; color: white; }
+        .btn-adjust { background: #2196f3; color: white; }
+        .btn-transfer { background: #9c27b0; color: white; }
+        .btn-history { background: #ff9800; color: white; }
+        
+        .usage-chart {
+            height: 200px;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            position: relative;
         }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
-        }
-
-        .empty-state-icon {
-            font-size: 4em;
-            opacity: 0.3;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 968px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary);
+        
+        .chart-bar-horizontal {
+            height: 30px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            padding-right: 10px;
+            justify-content: flex-end;
             color: white;
-            padding: 20px 30px;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: width 0.5s ease;
+        }
+        
+        .supplier-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 3px 10px;
             border-radius: 12px;
-            box-shadow: 0 6px 25px var(--shadow);
-            animation: slideUp 0.5s ease;
-            z-index: 1000;
-            display: none;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
         }
-
-        .toast.show {
-            display: block;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        
+        .expiry-badge {
+            display: inline-block;
+            background: #ffebee;
+            color: #c62828;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🌱 Agricultural Task Log</h1>
-            <p>Daily farm operations tracking system</p>
+    <div class="header">
+        <div class="header-content">
+            <h1>🌱 Agro Task & Inventory Log</h1>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchView('entry')">
+                    📝 New Task
+                </button>
+                <button class="nav-tab" onclick="switchView('inventory')">
+                    📦 Inventory
+                </button>
+                <button class="nav-tab" onclick="switchView('stats')">
+                    📊 Statistics
+                </button>
+                <button class="nav-tab" onclick="switchView('records')">
+                    📋 Records
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="main-content">
+    <div class="container">
+        <!-- VIEW 1: NEW TASK ENTRY -->
+        <div id="entryView" class="view active">
             <div class="form-card">
-                <h2>📝 New Task Entry</h2>
+                <h2 class="view-title">📝 New Task Entry</h2>
+                
+                <div class="info-note">
+                    <strong>💡 Quick Start Entry</strong>
+                    Link inventory items to auto-deduct stock when task is completed!
+                </div>
+
                 <form id="taskForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="date">Date</label>
+                            <label for="date">📅 Date</label>
                             <input type="date" id="date" required>
                         </div>
                         <div class="form-group">
-                            <label for="day">Day</label>
+                            <label for="day">📆 Day</label>
                             <input type="text" id="day" readonly>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="taskType">Task Type</label>
-                        <select id="taskType" required>
+                        <label for="taskType">🌾 Task Type</label>
+                        <select id="taskType" required onchange="toggleInventorySection()">
                             <option value="">Select task type...</option>
                             <option value="FERTILIZER">🌿 FERTILIZER</option>
                             <option value="PLANTING">🌱 PLANTING</option>
@@ -517,50 +283,77 @@
                             <option value="WEED">🌿 WEED</option>
                             <option value="SUCKER">✂️ SUCKER</option>
                             <option value="LAND PREPARATION">🚜 LAND PREPARATION</option>
+                            <option value="INVENTORY_CHECK">📦 INVENTORY CHECK</option>
                         </select>
+                    </div>
+
+                    <!-- INVENTORY USAGE SECTION -->
+                    <div class="form-group" id="inventoryUsageSection" style="display: none;">
+                        <label>📦 Inventory Usage</label>
+                        <div class="info-note" style="margin-bottom: 15px; font-size: 0.9em;">
+                            💡 Items will be auto-deducted when task is marked as completed
+                        </div>
+                        <div class="inventory-usage-list" id="inventoryUsageList">
+                            <!-- Dynamic inventory items will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addInventoryItemRow()" style="margin-top: 10px;">
+                            ➕ Add Inventory Item
+                        </button>
+                    </div>
+
+                    <div class="form-group" id="cropTypeGroup" style="display: none;">
+                        <label for="cropType">🍍 Crop Type (for INDUCE)</label>
+                        <select id="cropType">
+                            <option value="">Select crop type...</option>
+                            <option value="SG1">SG1 (Harvest in 125 days)</option>
+                            <option value="MD2">MD2 (Harvest in 145 days)</option>
+                        </select>
+                        <div class="info-note" style="margin-top: 10px; font-size: 0.9em;">
+                            💡 <strong>Auto-Schedule:</strong> A HARVEST task will be automatically created!
+                        </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="timeStart">Time Start</label>
+                            <label for="timeStart">⏰ Time Start</label>
                             <input type="time" id="timeStart" required>
                         </div>
                         <div class="form-group">
-                            <label for="timeEnd">Time End</label>
-                            <input type="time" id="timeEnd" required>
+                            <label for="timeEnd">⏱️ Time End <span class="optional">(add later)</span></label>
+                            <input type="time" id="timeEnd">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="operator">Operator Name</label>
+                        <label for="operator">👤 Operator Name</label>
                         <input type="text" id="operator" placeholder="Enter operator name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="workNotes">Work Notes</label>
+                        <label for="workNotes">📋 Work Notes</label>
                         <textarea id="workNotes" placeholder="Describe the work performed, area covered, materials used..." required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="weather">Weather Condition</label>
+                        <label>📸 Before Work Photos <span class="optional">(optional)</span></label>
+                        <div class="file-upload">
+                            <div class="file-upload-icon">📷</div>
+                            <div class="file-upload-text">
+                                <strong>Upload photos before starting work</strong><br>
+                                <small>PNG, JPG up to 10MB each</small>
+                            </div>
+                            <input type="file" id="beforePhotosEntry" accept="image/*" multiple>
+                        </div>
+                        <div class="image-preview" id="beforePhotosEntryPreview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weather">🌤️ Weather Condition</label>
                         <input type="text" id="weather" placeholder="e.g., Sunny, 28°C, light breeze" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Upload Photos</label>
-                        <div class="file-upload">
-                            <div class="file-upload-icon">📷</div>
-                            <div class="file-upload-text">
-                                <strong>Click to upload</strong> or drag and drop<br>
-                                <small>PNG, JPG up to 10MB</small>
-                            </div>
-                            <input type="file" id="photos" accept="image/*" multiple>
-                        </div>
-                        <div class="image-preview" id="imagePreview"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status">Status</label>
+                        <label for="status">✅ Status</label>
                         <select id="status" required>
                             <option value="Pending">⏳ Pending</option>
                             <option value="In Progress">🔄 In Progress</option>
@@ -573,270 +366,481 @@
                         <button type="submit" class="btn btn-primary">
                             💾 Save Task
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="exportToExcel()">
-                            📊 Export to Excel
+                        <button type="reset" class="btn btn-secondary">
+                            🔄 Clear Form
                         </button>
                     </div>
                 </form>
             </div>
+        </div>
 
-            <div class="stats-panel">
-                <h3>📊 Task Statistics</h3>
-                <div class="stat-item">
-                    <span class="stat-label">Total Tasks</span>
-                    <span class="stat-value" id="totalTasks">0</span>
+        <!-- VIEW 2: INVENTORY MANAGEMENT -->
+        <div id="inventoryView" class="view">
+            <h2 class="view-title">📦 Inventory Management</h2>
+            
+            <!-- Quick Stats -->
+            <div class="stats-summary">
+                <div class="stats-compact-grid">
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="totalInventoryItems">0</div>
+                        <div class="stat-compact-label">Total Items</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="lowStockCount">0</div>
+                        <div class="stat-compact-label">Low Stock</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="totalInventoryValue">$0</div>
+                        <div class="stat-compact-label">Total Value</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="outOfStockCount">0</div>
+                        <div class="stat-compact-label">Out of Stock</div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Completed</span>
-                    <span class="stat-value" id="completedTasks">0</span>
+            </div>
+            
+            <!-- Inventory Tabs -->
+            <div class="inventory-tabs">
+                <button class="nav-tab active" onclick="switchInventoryTab('items')">📋 All Items</button>
+                <button class="nav-tab" onclick="switchInventoryTab('lowstock')">⚠️ Low Stock</button>
+                <button class="nav-tab" onclick="switchInventoryTab('transactions')">🔄 Transactions</button>
+                <button class="nav-tab" onclick="switchInventoryTab('reports')">📊 Reports</button>
+                <button class="nav-tab" onclick="switchInventoryTab('newitem')">➕ New Item</button>
+            </div>
+            
+            <!-- Inventory Items Tab -->
+            <div id="inventoryItemsTab" class="inventory-tab-content active">
+                <div class="search-box" style="margin-bottom: 20px;">
+                    <input type="text" id="inventorySearch" placeholder="Search items by name, code, or category..." oninput="searchInventoryItems()">
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">In Progress</span>
-                    <span class="stat-value" id="progressTasks">0</span>
+                <div class="filter-group" style="margin-bottom: 20px;">
+                    <button class="filter-btn active" onclick="filterInventory('all')">All</button>
+                    <button class="filter-btn" onclick="filterInventory('FERTILIZER')">Fertilizers</button>
+                    <button class="filter-btn" onclick="filterInventory('CHEMICAL')">Chemicals</button>
+                    <button class="filter-btn" onclick="filterInventory('SEEDS')">Seeds</button>
+                    <button class="filter-btn" onclick="filterInventory('TOOLS')">Tools</button>
+                    <button class="filter-btn" onclick="filterInventory('OTHER')">Other</button>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Pending</span>
-                    <span class="stat-value" id="pendingTasks">0</span>
+                <div id="inventoryItemsList"></div>
+            </div>
+            
+            <!-- Low Stock Tab -->
+            <div id="inventoryLowStockTab" class="inventory-tab-content">
+                <div class="info-note" style="margin-bottom: 20px;">
+                    ⚠️ <strong>Items below minimum stock level</strong> - Consider restocking soon!
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Today's Tasks</span>
-                    <span class="stat-value" id="todayTasks">0</span>
+                <div id="lowStockItemsList"></div>
+            </div>
+            
+            <!-- Transactions Tab -->
+            <div id="inventoryTransactionsTab" class="inventory-tab-content">
+                <div class="filter-group" style="margin-bottom: 20px;">
+                    <button class="filter-btn active" onclick="filterTransactions('all')">All</button>
+                    <button class="filter-btn" onclick="filterTransactions('USAGE')">Usage</button>
+                    <button class="filter-btn" onclick="filterTransactions('RESTOCK')">Restock</button>
+                    <button class="filter-btn" onclick="filterTransactions('ADJUSTMENT')">Adjustment</button>
+                </div>
+                <div id="inventoryTransactionsList"></div>
+            </div>
+            
+            <!-- Reports Tab -->
+            <div id="inventoryReportsTab" class="inventory-tab-content">
+                <div class="chart-container">
+                    <div class="chart-title">Stock Value by Category</div>
+                    <div id="inventoryValueChart"></div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Monthly Usage Trends</div>
+                    <div id="usageTrendChart"></div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Top 10 Consumed Items (Last 30 Days)</div>
+                    <div id="topConsumedChart"></div>
+                </div>
+            </div>
+            
+            <!-- New Item Tab -->
+            <div id="inventoryNewItemTab" class="inventory-tab-content">
+                <div class="form-card">
+                    <h3>➕ Add New Inventory Item</h3>
+                    <form id="inventoryItemForm" onsubmit="saveInventoryItem(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemCode">Item Code</label>
+                                <input type="text" id="itemCode" placeholder="e.g., FERT-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemName">Item Name</label>
+                                <input type="text" id="itemName" placeholder="e.g., Urea 46-0-0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemCategory">Category</label>
+                                <select id="itemCategory" required>
+                                    <option value="">Select category...</option>
+                                    <option value="FERTILIZER">Fertilizer</option>
+                                    <option value="CHEMICAL">Chemical</option>
+                                    <option value="SEEDS">Seeds</option>
+                                    <option value="TOOLS">Tools</option>
+                                    <option value="EQUIPMENT">Equipment</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemSubCategory">Sub-Category</label>
+                                <input type="text" id="itemSubCategory" placeholder="e.g., Nitrogen, Herbicide">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="currentStock">Current Stock</label>
+                                <input type="number" id="currentStock" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemUnit">Unit</label>
+                                <select id="itemUnit" required>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="L">Liter</option>
+                                    <option value="ml">ml</option>
+                                    <option value="bags">Bags</option>
+                                    <option value="pieces">Pieces</option>
+                                    <option value="units">Units</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="minStock">Minimum Stock Level</label>
+                                <input type="number" id="minStock" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxStock">Maximum Stock Level</label>
+                                <input type="number" id="maxStock" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="unitPrice">Unit Price ($)</label>
+                                <input type="number" id="unitPrice" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supplier">Supplier</label>
+                                <input type="text" id="supplier" placeholder="Supplier name">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="storageLocation">Storage Location</label>
+                            <input type="text" id="storageLocation" placeholder="e.g., Store Room A, Shelf 3">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="itemNotes">Notes</label>
+                            <textarea id="itemNotes" placeholder="Special instructions, handling notes..."></textarea>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">💾 Save Item</button>
+                            <button type="reset" class="btn btn-secondary">🔄 Clear Form</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        <div class="records-section">
-            <h2>📋 Task Records</h2>
-            <div class="records-filter">
-                <button class="filter-btn active" onclick="filterRecords('all')">All</button>
-                <button class="filter-btn" onclick="filterRecords('FERTILIZER')">Fertilizer</button>
-                <button class="filter-btn" onclick="filterRecords('PLANTING')">Planting</button>
-                <button class="filter-btn" onclick="filterRecords('HARVEST')">Harvest</button>
-                <button class="filter-btn" onclick="filterRecords('WEED')">Weed</button>
-                <button class="filter-btn" onclick="filterRecords('SUCKER')">Sucker</button>
-                <button class="filter-btn" onclick="filterRecords('LAND PREPARATION')">Land Prep</button>
+        <!-- VIEW 3: STATISTICS -->
+        <div id="statsView" class="view">
+            <h2 class="view-title">📊 Task Statistics Dashboard</h2>
+            
+            <!-- Compact Summary Box -->
+            <div class="stats-summary">
+                <div class="stats-summary-title">📋 Quick Overview</div>
+                <div class="stats-compact-grid">
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="totalTasks">0</div>
+                        <div class="stat-compact-label">Total Tasks</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="completedTasks">0</div>
+                        <div class="stat-compact-label">Completed</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="progressTasks">0</div>
+                        <div class="stat-compact-label">In Progress</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="pendingTasks">0</div>
+                        <div class="stat-compact-label">Pending</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="todayTasks">0</div>
+                        <div class="stat-compact-label">Today</div>
+                    </div>
+                    <div class="stat-compact">
+                        <div class="stat-compact-value" id="totalPhotos">0</div>
+                        <div class="stat-compact-label">Photos</div>
+                    </div>
+                </div>
             </div>
-            <div id="recordsList">
+
+            <div class="chart-container">
+                <div class="chart-title">Tasks by Type</div>
+                <div id="taskTypeChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Monthly Activity</div>
+                <div id="monthlyChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">📊 Activity Details by Task Type</div>
+                <div id="taskTypeDetails"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">📅 Recent Activity Log</div>
+                <div id="recentActivityLog"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">👥 Operator Performance</div>
+                <div id="operatorStats"></div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: TASK RECORDS -->
+        <div id="recordsView" class="view">
+            <h2 class="view-title">📋 Task Records</h2>
+            
+            <div class="records-header">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by operator, notes, or weather...">
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="filterRecords('all')">All</button>
+                    <button class="filter-btn" onclick="filterRecords('FERTILIZER')">Fertilizer</button>
+                    <button class="filter-btn" onclick="filterRecords('PLANTING')">Planting</button>
+                    <button class="filter-btn" onclick="filterRecords('HARVEST')">Harvest</button>
+                    <button class="filter-btn" onclick="filterRecords('WEED')">Weed</button>
+                    <button class="filter-btn" onclick="filterRecords('SUCKER')">Sucker</button>
+                    <button class="filter-btn" onclick="filterRecords('LAND PREPARATION')">Land Prep</button>
+                </div>
+            </div>
+
+            <div class="records-list" id="recordsList">
                 <div class="empty-state">
                     <div class="empty-state-icon">📝</div>
                     <h3>No tasks recorded yet</h3>
-                    <p>Start by adding your first task above</p>
+                    <p>Start by adding your first task in the New Task Entry view</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODALS FOR INVENTORY -->
+    
+    <!-- Restock Modal -->
+    <div id="restockModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📦 Restock Item</span>
+                <button class="modal-close" onclick="closeModal('restockModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="restockItemInfo" style="margin-bottom: 20px;"></div>
+                <div class="form-group">
+                    <label for="restockQuantity">Quantity to Add</label>
+                    <input type="number" id="restockQuantity" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="restockSupplier">Supplier</label>
+                    <input type="text" id="restockSupplier" placeholder="Supplier name">
+                </div>
+                <div class="form-group">
+                    <label for="restockCost">Total Cost ($)</label>
+                    <input type="number" id="restockCost" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="restockNotes">Notes</label>
+                    <textarea id="restockNotes" placeholder="Invoice number, quality notes..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('restockModal')">Cancel</button>
+                <button class="btn-save" onclick="saveRestock()">Add to Stock</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Adjust Stock Modal -->
+    <div id="adjustStockModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📊 Adjust Stock</span>
+                <button class="modal-close" onclick="closeModal('adjustStockModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="adjustItemInfo" style="margin-bottom: 20px;"></div>
+                <div class="form-group">
+                    <label for="adjustType">Adjustment Type</label>
+                    <select id="adjustType">
+                        <option value="ADD">Add Stock (+)</option>
+                        <option value="REMOVE">Remove Stock (-)</option>
+                        <option value="SET">Set Exact Amount (=)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="adjustQuantity">Quantity</label>
+                    <input type="number" id="adjustQuantity" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="adjustReason">Reason</label>
+                    <textarea id="adjustReason" placeholder="Why is this adjustment needed?" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('adjustStockModal')">Cancel</button>
+                <button class="btn-save" onclick="saveAdjustment()">Apply Adjustment</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item History Modal -->
+    <div id="itemHistoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📜 Item History</span>
+                <button class="modal-close" onclick="closeModal('itemHistoryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="historyItemInfo" style="margin-bottom: 20px;"></div>
+                <div id="itemHistoryList" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXISTING MODALS (Keep from your original code) -->
+    <div id="completeModal" class="modal">
+        <!-- ... your existing complete modal ... -->
+    </div>
+    
+    <div id="statusModal" class="modal">
+        <!-- ... your existing status modal ... -->
+    </div>
+    
+    <div id="photosModal" class="modal">
+        <!-- ... your existing photos modal ... -->
+    </div>
+
+    <button class="export-btn" onclick="exportToExcel()">
+        📥 Export to Excel
+    </button>
+    
+    <button class="install-btn" id="installButton" style="display: none;">
+        📱 Install App
+    </button>
+
     <div class="toast" id="toast"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
+        // ==================== GLOBAL VARIABLES ====================
         let tasks = JSON.parse(localStorage.getItem('agroTasks')) || [];
+        let inventoryItems = JSON.parse(localStorage.getItem('agroInventoryItems')) || [];
+        let inventoryTransactions = JSON.parse(localStorage.getItem('agroInventoryTransactions')) || [];
         let currentFilter = 'all';
-        let uploadedImages = [];
+        let editingTaskId = null;
+        let editingInventoryItemId = null;
+        let beforeWorkPhotosData = [];
+        let afterWorkPhotosData = [];
+        let additionalPhotosData = [];
+        let beforePhotosEntryData = [];
+        let currentInventoryTab = 'items';
+        let inventoryFilter = 'all';
 
-        // Set today's date
-        document.getElementById('date').valueAsDate = new Date();
-        updateDayField();
-
-        // Update day when date changes
-        document.getElementById('date').addEventListener('change', updateDayField);
-
-        function updateDayField() {
-            const dateInput = document.getElementById('date');
-            const dayInput = document.getElementById('day');
-            if (dateInput.value) {
-                const date = new Date(dateInput.value);
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                dayInput.value = days[date.getDay()];
-            }
-        }
-
-        // Handle file upload
-        document.getElementById('photos').addEventListener('change', function(e) {
-            const files = e.target.files;
-            const preview = document.getElementById('imagePreview');
-            preview.innerHTML = '';
-            uploadedImages = [];
-
-            for (let file of files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    preview.appendChild(img);
-                    uploadedImages.push(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Form submission
-        document.getElementById('taskForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const task = {
-                id: Date.now(),
-                date: document.getElementById('date').value,
-                day: document.getElementById('day').value,
-                taskType: document.getElementById('taskType').value,
-                timeStart: document.getElementById('timeStart').value,
-                timeEnd: document.getElementById('timeEnd').value,
-                operator: document.getElementById('operator').value,
-                workNotes: document.getElementById('workNotes').value,
-                weather: document.getElementById('weather').value,
-                status: document.getElementById('status').value,
-                images: uploadedImages,
-                duration: calculateDuration(document.getElementById('timeStart').value, document.getElementById('timeEnd').value)
-            };
-
-            tasks.push(task);
-            localStorage.setItem('agroTasks', JSON.stringify(tasks));
-
-            showToast('✅ Task saved successfully!');
-            this.reset();
-            document.getElementById('imagePreview').innerHTML = '';
-            uploadedImages = [];
-            document.getElementById('date').valueAsDate = new Date();
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
             updateDayField();
             
-            renderRecords();
+            // Initialize stats and views
             updateStats();
+            updateInventoryStats();
+            renderRecords();
+            renderCharts();
+            renderInventoryItems();
+            renderInventoryTransactions();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Check for PWA install prompt
+            checkPWAInstall();
         });
 
-        function calculateDuration(start, end) {
-            const startTime = new Date('2000-01-01 ' + start);
-            const endTime = new Date('2000-01-01 ' + end);
-            const diff = (endTime - startTime) / (1000 * 60 * 60);
-            return diff.toFixed(2) + ' hrs';
-        }
-
-        function renderRecords() {
-            const recordsList = document.getElementById('recordsList');
-            let filteredTasks = currentFilter === 'all' ? tasks : tasks.filter(t => t.taskType === currentFilter);
+        // ==================== VIEW MANAGEMENT ====================
+        function switchView(view) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             
-            if (filteredTasks.length === 0) {
-                recordsList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📝</div>
-                        <h3>No tasks found</h3>
-                        <p>No tasks match your current filter</p>
-                    </div>
-                `;
-                return;
-            }
-
-            filteredTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            recordsList.innerHTML = filteredTasks.map(task => `
-                <div class="record-card">
-                    <div class="record-header">
-                        <div>
-                            <div class="record-date">${formatDate(task.date)} - ${task.day}</div>
-                            <div style="margin-top: 5px; font-size: 1.1em; font-weight: 600;">${task.taskType}</div>
-                        </div>
-                        <div class="record-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</div>
-                    </div>
-                    <div class="record-details">
-                        <div class="record-detail">
-                            <strong>⏰ Time</strong>
-                            ${task.timeStart} - ${task.timeEnd}
-                        </div>
-                        <div class="record-detail">
-                            <strong>⏱️ Duration</strong>
-                            ${task.duration}
-                        </div>
-                        <div class="record-detail">
-                            <strong>👤 Operator</strong>
-                            ${task.operator}
-                        </div>
-                        <div class="record-detail">
-                            <strong>🌤️ Weather</strong>
-                            ${task.weather}
-                        </div>
-                    </div>
-                    <div class="record-notes">
-                        <strong>📋 Work Notes:</strong><br>
-                        ${task.workNotes}
-                    </div>
-                    ${task.images && task.images.length > 0 ? `
-                        <div class="record-images">
-                            ${task.images.map(img => `<img src="${img}" alt="Task photo" onclick="viewImage('${img}')">`).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-
-        function viewImage(src) {
-            window.open(src, '_blank');
-        }
-
-        function filterRecords(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            // Show selected view
+            document.getElementById(view + 'View').classList.add('active');
+            
+            // Update active tab
             event.target.classList.add('active');
-            renderRecords();
-        }
-
-        function updateStats() {
-            document.getElementById('totalTasks').textContent = tasks.length;
-            document.getElementById('completedTasks').textContent = tasks.filter(t => t.status === 'Completed').length;
-            document.getElementById('progressTasks').textContent = tasks.filter(t => t.status === 'In Progress').length;
-            document.getElementById('pendingTasks').textContent = tasks.filter(t => t.status === 'Pending').length;
             
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('todayTasks').textContent = tasks.filter(t => t.date === today).length;
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function exportToExcel() {
-            if (tasks.length === 0) {
-                showToast('⚠️ No data to export');
-                return;
+            // Refresh data if needed
+            if (view === 'stats') {
+                renderCharts();
+            } else if (view === 'inventory') {
+                updateInventoryStats();
+                renderInventoryItems();
+                renderInventoryCharts();
+            } else if (view === 'records') {
+                renderRecords();
             }
-
-            const exportData = tasks.map(task => ({
-                'Date': task.date,
-                'Day': task.day,
-                'Task Type': task.taskType,
-                'Time Start': task.timeStart,
-                'Time End': task.timeEnd,
-                'Duration': task.duration,
-                'Operator': task.operator,
-                'Work Notes': task.workNotes,
-                'Weather': task.weather,
-                'Status': task.status,
-                'Photos': task.images ? task.images.length + ' photo(s)' : 'No photos'
-            }));
-
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(exportData);
-            
-            // Set column widths
-            ws['!cols'] = [
-                {wch: 12}, {wch: 10}, {wch: 18}, {wch: 10}, {wch: 10}, 
-                {wch: 12}, {wch: 15}, {wch: 40}, {wch: 18}, {wch: 12}, {wch: 12}
-            ];
-
-            XLSX.utils.book_append_sheet(wb, ws, "Task Log");
-            XLSX.writeFile(wb, `Agro_Task_Log_${new Date().toISOString().split('T')[0]}.xlsx`);
-            showToast('📥 Excel file downloaded!');
         }
 
-        // Initialize
-        renderRecords();
-        updateStats();
-    </script>
-</body>
-</html>
+        function switchInventoryTab(tab) {
+            currentInventoryTab = tab;
+            document.querySelectorAll('.inventory-tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.inventory-tabs .nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById('inventory' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tab === 'reports') {
+                renderInventoryCharts();
+            } else if (tab === 'lowstock') {
+                renderLowStockItems();
+            }
+        }
+
+        // ==================== TASK MANAGEMENT ====================
+        // [Your existing task management functions - keep all of them]
+        // ... calculateDuration, completeTask, saveCompletion, editTaskStatus, etc.
+
+        // ==================== INVENTORY MANAGEMENT ====================
+        
+        function toggleInventorySection() {
+            const taskType = document.getElementById('taskType').value;
+            const inventorySection = document.getElementById('inventoryUsageSection');
+            const inventoryTasks = ['FERTILIZER', 'INDUCE', 'WEED', 'PLANTING'];
+            
+            if (inventoryTasks.includes(taskType)) {
+                inventorySection.style.display = 'block';
+                loadInventoryForTask(taskType);
+            } else {
+                inventorySection.style.display = 'none';
+                document.getElementById('inventoryUsageList').innerHTML =
