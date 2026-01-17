@@ -1,0 +1,6 @@
+agro-task-log/
+├── 📄 index.html          (Your existing HTML code)
+├── 📄 manifest.json       (PWA config)
+├── 📄 service-worker.js   (Offline support)
+├── 📄 README.md           (This documentation)
+└── 📄 .gitignore         (Git ignore rules)
